@@ -14,7 +14,9 @@ body
             th(scope="col") Ingredients 
             th(scope="col") Process of cooking 
             th(scope="col") Actions 
-        tbody        
+        tbody   
+
+        p This  web application was created to fulfill Web Technology module’s requirements and does not represent an actual company or service     
 script.
   document.addEventListener('DOMContentLoaded', function() {
     axios.get('/api/recipe').then(function(response) {
@@ -54,3 +56,4 @@ script.
     });
     
   });
+
