@@ -1,1 +1,2 @@
 # WT-CW2
+This project is the assessment for Web technology module CW2. It imitates a simplistic web-application for sharing and looking for recipes with Create, Retrieve, Update, Delete (CRUD) functionality. This project uses Node.js and Express as a stack for backend, Pug templating engine for rendering the UIs. The data about recipes is stored in JSON format. Additionally, middlewares ans modules like express-validator (for input validation), nodemon are used for functionality of the application.
