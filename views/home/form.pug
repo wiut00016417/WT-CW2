@@ -1,0 +1,48 @@
+include ../head.pug
+body
+  .container.mt-5
+    h1 #{mode}
+    .mb-3
+      label(for="Name" class="form-label") Recipe Name
+      input(type="text" class="form-control" id="Name" name="Name" required)
+    .mb-3
+      label(for="Ingredients" class="form-label") Ingredients
+      input(type="text" class="form-control" id="Ingredients" name="Ingredients" required)
+    .mb-3 
+      label(for="Steps" class="form-label") Process of cooking 
+      input(type="text" class="form-control" id="Steps" name="Steps" required)
+
+    button(type="submit" class="btn btn-success" onclick="submitForm()") #{mode === 'Update' ? 'Update' : 'Add'}
+    span &nbsp;
+    button(type="submit" class="btn btn-primary" onclick="window.location.href='/'") Back to list
+
+  script.
+
+    if ("#{mode}" === "Update") {
+      const eventData = !{JSON.stringify(eventData || {})}.recipe;
+      document.getElementById('Name').value = eventData.Name || '';
+      document.getElementById('Ingredients').value = eventData.Ingredients || '';
+      document.getElementById('Steps').value = eventData.Steps || '';
+    }
+
+    function submitForm() {
+      const eventData = {
+        Name: document.getElementById('Name').value,
+        Ingredients: document.getElementById('Ingredients').value,
+        Steps: document.getElementById('Steps').value,
+      };
+
+      const url = "#{mode}" === "Update" ? `/api/recipe/${!{JSON.stringify(eventData || {})}.id}` : '/api/recipe';
+      const method = "#{mode}" === "Update" ? 'put' : 'post';
+
+      axios[method](url, eventData).then(response => {
+        alert('Action succeeded!');
+        location.href = '/'
+      })
+      .catch(error => {
+        if(error.response)
+          alert(JSON.stringify(error.response.data.errors))
+        else
+          alert(error)
+      });
+    }

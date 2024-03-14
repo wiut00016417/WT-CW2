@@ -1,0 +1,56 @@
+include ../head.pug
+body
+    .container.mt-5
+      .row.d-flex.align-items-center
+        .col-md-6
+          h1 Recipes 
+        .col-md-6.text-end
+          a.btn.btn-success(href='/add', role='button') Add      
+      table.table.table-responsive.table-hover.table-striped.table-dark
+        thead
+          tr
+            th(scope="col") Id 
+            th(scope="col") Recipe Name
+            th(scope="col") Ingredients 
+            th(scope="col") Process of cooking 
+            th(scope="col") Actions 
+        tbody        
+script.
+  document.addEventListener('DOMContentLoaded', function() {
+    axios.get('/api/recipe').then(function(response) {
+      const recipes = response.data;
+      const tableBody = document.querySelector('table tbody');
+      recipes.forEach(t => {
+        const row = document.createElement('tr');
+        const recipe = t.recipe
+        row.innerHTML = `
+          <td>${t.id}</td>
+          <td>${recipe.Name}</td>
+          <td>${recipe.Ingredients}</td>
+          <td>${recipe.Steps}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" data-id="${t.id}" onclick="window.location.href='/update/${t.id}'">Update</button>
+            <button class="btn btn-danger btn-sm" data-id="${t.id}">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+    document.addEventListener('click', function(event) {
+      if (event.target && event.target.classList.contains('btn-danger')) {
+        const recipeId = event.target.getAttribute('data-id');
+        axios.delete(`/api/recipe/${recipeId}`).then(function(response) {
+          alert('Recipe deleted successfully', response);
+          location.href = '/'
+        })
+        .catch(function(error) {
+          alert('Error deleting response: ' + error);
+        });
+      }
+    });
+    
+  });
